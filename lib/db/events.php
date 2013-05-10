@@ -68,6 +68,24 @@ $handlers = array(
         'schedule'         => 'instant',
         'internal'         => 1,
     ),
+    'course_updated' => array (
+        'handlerfile'      => '/lib/questionlib.php',
+        'handlerfunction'  => 'question_handle_course_update',
+        'schedule'         => 'instant',
+        'internal'         => 1,
+    ),
+    'course_category_updated' => array (
+        'handlerfile'      => '/lib/questionlib.php',
+        'handlerfunction'  => 'question_handle_category_update',
+        'schedule'         => 'instant',
+        'internal'         => 1,
+    ),
+    'mod_updated' => array (
+        'handlerfile'      => '/lib/questionlib.php',
+        'handlerfunction'  => 'question_handle_activity_update',
+        'schedule'         => 'instant',
+        'internal'         => 1,
+    ),
 
 /* no more here please, core should not consume any events!!!!!!! */
 );

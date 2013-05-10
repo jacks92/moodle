@@ -1972,3 +1972,39 @@ function question_page_type_list($pagetype, $parentcontext, $currentcontext) {
         return $types;
     }
 }
+
+function question_handle_course_update($cm) {
+    global $DB;
+
+    $context = context_course::instance($cm->id);
+    if ($category = question_get_default_category($context->id)) {
+            $contextname = print_context_name($context, false, true);
+            $category->name = get_string('defaultfor', 'question', $contextname);
+            $category->info = get_string('defaultinfofor', 'question', $contextname);
+            $DB->update_record('question_categories', $category);
+    }
+}
+
+function question_handle_category_update($cat) {
+    global $DB;
+
+    $context = context_coursecat::instance($cat->id);
+    if ($category = question_get_default_category($context->id)) {
+            $contextname = print_context_name($context, false, true);
+            $category->name = get_string('defaultfor', 'question', $contextname);
+            $category->info = get_string('defaultinfofor', 'question', $contextname);
+            $DB->update_record('question_categories', $category);
+    }
+}
+
+function question_handle_activity_update($activity) {
+    global $DB;
+
+    $context = context_module::instance($activity->cmid);
+    if ($category = question_get_default_category($context->id)) {
+            $contextname = print_context_name($context, false, true);
+            $category->name = get_string('defaultfor', 'question', $contextname);
+            $category->info = get_string('defaultinfofor', 'question', $contextname);
+            $DB->update_record('question_categories', $category);
+    }
+}
