@@ -3640,6 +3640,7 @@ function course_category_hide($category) {
         }
     }
     add_to_log(SITEID, "category", "hide", "editcategory.php?id=$category->id", $category->id);
+    events_trigger('course_category_updated', $category);
 }
 
 /**
@@ -3664,6 +3665,7 @@ function course_category_show($category) {
         }
     }
     add_to_log(SITEID, "category", "show", "editcategory.php?id=$category->id", $category->id);
+    events_trigger('course_category_updated', $category);
 }
 
 /**
@@ -3696,6 +3698,8 @@ function move_category($category, $newparentcat) {
 
     // Log action.
     add_to_log(SITEID, "category", "move", "editcategory.php?id=$category->id", $category->id);
+
+    events_trigger('course_category_updated', $category);
 
     // and fix the sortorders
     fix_course_sortorder();
