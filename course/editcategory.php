@@ -125,6 +125,11 @@ if ($mform->is_cancelled()) {
 
     $newcategory = file_postupdate_standard_editor($newcategory, 'description', $editoroptions, $categorycontext, 'coursecat', 'description', 0);
     $DB->update_record('course_categories', $newcategory);
+    if ($id) {
+        events_trigger('course_category_updated', $newcategory);
+    } else {
+        events_trigger('course_category_created', $newcategory);
+    }
     add_to_log(SITEID, "category", $logaction, "editcategory.php?id=$newcategory->id", $newcategory->id);
     fix_course_sortorder();
 
