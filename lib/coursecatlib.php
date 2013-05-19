@@ -381,6 +381,8 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
         add_to_log(SITEID, "category", 'add', "editcategory.php?id=$newcategory->id", $newcategory->id);
         cache_helper::purge_by_event('changesincoursecat');
 
+        events_trigger('course_category_created', $newcategory);
+
         return self::get($newcategory->id, MUST_EXIST, true);
     }
 
@@ -474,6 +476,9 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
         $DB->update_record('course_categories', $newcategory);
         add_to_log(SITEID, "category", 'update', "editcategory.php?id=$this->id", $this->id);
         fix_course_sortorder();
+
+        events_trigger('course_category_updated', $newcategory);
+
         // purge cache even if fix_course_sortorder() did not do it
         cache_helper::purge_by_event('changesincoursecat');
 
@@ -1511,6 +1516,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
                 $childcat->change_parent_raw($newparentcat);
                 // Log action.
                 add_to_log(SITEID, "category", "move", "editcategory.php?id=$childcat->id", $childcat->id);
+                events_trigger('course_category_updated', $childcat);
             }
             fix_course_sortorder();
         }
@@ -1669,6 +1675,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
             cache_helper::purge_by_event('changesincoursecat');
             $this->restore();
             add_to_log(SITEID, "category", "move", "editcategory.php?id=$this->id", $this->id);
+            events_trigger('course_category_updated', $newparentcat);
         }
     }
 
@@ -1718,6 +1725,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
                 $DB->set_field('course', 'visible', 0, array('category' => $cat->id));
             }
         }
+        events_trigger('course_category_updated', $cat);
         return true;
     }
 
@@ -1771,6 +1779,7 @@ class coursecat implements renderable, cacheable_object, IteratorAggregate {
                 $DB->execute("UPDATE {course} SET visible = visibleold WHERE category = ?", array($cat->id));
             }
         }
+        events_trigger('course_category_updated', $cat);
         return true;
     }
 
